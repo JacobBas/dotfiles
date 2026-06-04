@@ -3,6 +3,40 @@ local cmd = vim.cmd -- to exectue vim commands
 
 local refreshing = false
 
+local github_border_groups = {
+    "WinSeparator",
+    "VertSplit",
+    "FloatBorder",
+    "FloatTitle",
+    "LspInfoBorder",
+    "PmenuBorder",
+    "TelescopeBorder",
+    "TelescopePromptBorder",
+    "TelescopeResultsBorder",
+    "TelescopePreviewBorder",
+    "TelescopeTitle",
+    "TelescopePromptTitle",
+    "TelescopeResultsTitle",
+    "TelescopePreviewTitle",
+    "LazyBorder",
+    "MasonBorder",
+    "WhichKeyBorder"
+}
+
+local function set_github_border_highlights()
+    local border_color = vim.o.background == "dark" and "#ffffff" or "#000000"
+
+    for _, group in ipairs(github_border_groups) do
+        local ok, highlight =
+            pcall(vim.api.nvim_get_hl, 0, {name = group, link = false})
+        if not ok then highlight = {} end
+
+        highlight.fg = border_color
+        highlight.link = nil
+        vim.api.nvim_set_hl(0, group, highlight)
+    end
+end
+
 function ColorMyPencils()
     if (vim.g.colorscheme == "noirbuddy") then
         require('noirbuddy').setup {
@@ -260,10 +294,20 @@ function ColorMyPencils()
         vim.g.moonflyNormalFloat = true
 
     elseif (vim.g.colorscheme == "github") then
-        require("github-theme").setup({theme_style = "dimmed"})
+        require("github-theme").setup({
+            options = {
+                transparent = false,
+                terminal_colors = true,
+                dim_inactive = false
+            }
+        })
+        local github_theme = vim.o.background == "dark" and "github_dark_dimmed"
+                                 or "github_light_colorblind"
+        vim.cmd.colorscheme(github_theme)
 
         -- making sure lualine is configured
-        require('lualine').setup {options = {theme = "auto"}}
+        require('lualine').setup {options = {theme = github_theme}}
+        set_github_border_highlights()
 
     elseif (vim.g.colorscheme == "moonbow") then
         require("moonbow")
@@ -369,7 +413,7 @@ function ColorMyPencils()
     end
 end
 
-local function refresh_colors()
+function RefreshColors()
     if refreshing then return end
 
     refreshing = true
@@ -382,7 +426,7 @@ end
 vim.api.nvim_create_autocmd("OptionSet", {
     group = vim.api.nvim_create_augroup("JazzfishColors", {clear = true}),
     pattern = "background",
-    callback = function() vim.schedule(refresh_colors) end
+    callback = function() vim.schedule(RefreshColors) end
 })
 
-refresh_colors()
+RefreshColors()

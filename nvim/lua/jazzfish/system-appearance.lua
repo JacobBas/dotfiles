@@ -22,6 +22,15 @@ local function read_background()
     return "light"
 end
 
+local function refresh_colors()
+    if type(RefreshColors) == "function" then
+        RefreshColors()
+        return
+    end
+
+    if type(ColorMyPencils) == "function" then ColorMyPencils() end
+end
+
 function M.current()
     return read_background()
 end
@@ -30,6 +39,7 @@ function M.sync()
     local background = read_background() or fallback_background
     if vim.o.background ~= background then
         vim.o.background = background
+        refresh_colors()
     end
 
     return background

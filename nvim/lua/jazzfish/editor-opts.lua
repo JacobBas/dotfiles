@@ -29,7 +29,8 @@ opt.cmdheight = 0
 opt.mouse = ""
 
 -- -- setting the colortheme
-g.colorscheme = "gruvbox"
+g.colorscheme = "github"
+-- g.colorscheme = "gruvbox"
 -- g.colorscheme = "everforest"
 -- g.colorscheme = "cyberdream"
 -- g.colorscheme = "ayu-light"
