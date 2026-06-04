@@ -38,6 +38,7 @@ g.colorscheme = "gruvbox"
 -- g.colorscheme = "rose-pine"
 -- g.colorscheme = 'acme'
 -- vim.o.background = 'light' -- 'light' or 'dark'
+require("jazzfish.system-appearance").setup()
 
 opt.updatetime = 500
 opt.redrawtime = 1000  -- ms to wait for syntax highlighting

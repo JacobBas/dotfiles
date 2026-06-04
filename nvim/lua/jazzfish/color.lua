@@ -1,6 +1,8 @@
 local vim = vim
 local cmd = vim.cmd -- to exectue vim commands
 
+local refreshing = false
+
 function ColorMyPencils()
     if (vim.g.colorscheme == "noirbuddy") then
         require('noirbuddy').setup {
@@ -367,4 +369,20 @@ function ColorMyPencils()
     end
 end
 
-ColorMyPencils()
+local function refresh_colors()
+    if refreshing then return end
+
+    refreshing = true
+    local ok, err = pcall(ColorMyPencils)
+    refreshing = false
+
+    if not ok then error(err) end
+end
+
+vim.api.nvim_create_autocmd("OptionSet", {
+    group = vim.api.nvim_create_augroup("JazzfishColors", {clear = true}),
+    pattern = "background",
+    callback = function() vim.schedule(refresh_colors) end
+})
+
+refresh_colors()
