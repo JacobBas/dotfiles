@@ -18,44 +18,7 @@ require("lazy").setup({
     ---------------------------------------------------------------------------------------- 
     ---- FILES AND INFORMATION -------------------------------------------------------------
     ---------------------------------------------------------------------------------------- 
-    {
-        'nvim-lualine/lualine.nvim',
-        config = function()
-            require('lualine').setup {
-                options = {
-                    icons_enabled = true,
-                    theme = 'auto',
-                    component_separators = {left = '', right = ''},
-                    section_separators = {left = '', right = ''},
-                    disabled_filetypes = {},
-                    always_divide_middle = true,
-                    globalstatus = true
-                },
-                sections = {
-                    lualine_a = {'mode'},
-                    lualine_b = {'branch', 'diff', 'diagnostics'},
-                    lualine_c = {'filename'},
-                    lualine_x = {'encoding', 'fileformat', 'filetype'},
-                    lualine_y = {'progress'},
-                    lualine_z = {'location'}
-                },
-                inactive_sections = {
-                    lualine_a = {},
-                    lualine_b = {},
-                    lualine_c = {'filename'},
-                    lualine_x = {'location'},
-                    lualine_y = {},
-                    lualine_z = {}
-                },
-                tabline = {},
-                extensions = {}
-            }
-
-            vim.opt.laststatus = 3
-            vim.cmd('highlight WinSeparator guibg=None')
-
-        end
-    }, -- 
+    {'nvim-lualine/lualine.nvim'}, -- 
     {"nvim-pack/nvim-spectre"}, --
     ---------------------------------------------------------------------------------------- 
     ---- GIT INTEGRATIONS ------------------------------------------------------------------
@@ -137,26 +100,38 @@ require("lazy").setup({
     ---------------------------------------------------------------------------------------- 
     ---- FUZZY FINDER ----------------------------------------------------------------------
     ---------------------------------------------------------------------------------------- 
-    {'nvim-telescope/telescope.nvim', dependencies = {'nvim-lua/plenary.nvim'}}, --
-    {'nvim-telescope/telescope-fzy-native.nvim'}, --
     {
-        "dmtrKovalenko/fff.nvim",
-        build = "cargo build --release",
-        -- or if you are using nixos
-        -- build = "nix run .#release",
-        opts = {
-            -- pass here all the options
-        },
-        keys = {
-            {
-                "ff", -- try it if you didn't it is a banger keybinding for a picker
-                function()
-                    require("fff").find_files() -- or find_in_git_root() if you only want git files
-                end,
-                desc = "Open file picker"
+        'nvim-telescope/telescope.nvim',
+        dependencies = {'nvim-lua/plenary.nvim'},
+        config = function()
+            require('telescope').setup {
+                defaults = {
+                    -- This applies globally to ALL pickers in Telescope
+                    file_ignore_patterns = {
+                        "%.git/", "%.github/", "%.mypy_cache/",
+                        "%.pytest_cache/", "%.ruff_cache/", "%.venv/",
+                        "__pycache__/", "%.egg%-info/", "%.pyc"
+                    },
+                    vimgrep_arguments = {
+                        "rg", "--color=never", "--no-heading",
+                        "--with-filename", "--line-number", "--column",
+                        "--smart-case", "--hidden"
+                    }
+                },
+                pickers = {
+                    find_files = {
+                        find_command = {
+                            "rg", "--files", "--hidden", "--no-ignore"
+                            -- Removed "--no-ignore" to prevent unwanted files from flooding in
+                        }
+                    }
+                }
             }
-        }
+
+        end
+
     }, --
+    {'nvim-telescope/telescope-fzy-native.nvim'}, --
     ---------------------------------------------------------------------------------------- 
     ---- TREE-SITTER -----------------------------------------------------------------------
     ---------------------------------------------------------------------------------------- 
@@ -168,7 +143,7 @@ require("lazy").setup({
         config = function()
             require('nvim-treesitter.configs').setup {
                 ensure_installed = {
-                    "go", "javascript", "lua", "python", "rust", "vim"
+                    "go", "javascript", "lua", "python", "rust", "vim", "astro"
                 },
                 highlight = {
                     enable = true,
@@ -282,6 +257,7 @@ require("lazy").setup({
         end
     }, --
     {'RRethy/vim-illuminate'}, -- 
+    {'OXY2DEV/markview.nvim'}, -- 
     ---------------------------------------------------------------------------------------- 
     ---- THEMES ----------------------------------------------------------------------------
     ---------------------------------------------------------------------------------------- 
@@ -293,8 +269,27 @@ require("lazy").setup({
         name = "github-theme",
         lazy = false,
         priority = 1000
-    } --
+    }, --
+    {
+        "oskarnurm/koda.nvim",
+        lazy = false, -- make sure we load this during startup if it is your main colorscheme
+        priority = 1000 -- make sure to load this before all the other start plugins
+    }, {
+        "rose-pine/neovim",
+        name = "rose-pine",
+        lazy = false,
+        priority = 1000
+    }
     ---------------------------------------------------------------------------------------- 
     ---- AI STUFF --------------------------------------------------------------------------
     ---------------------------------------------------------------------------------------- 
+    -- {'github/copilot.vim'}, --
+    -- {
+    --     "CopilotC-Nvim/CopilotChat.nvim",
+    --     dependencies = {{"nvim-lua/plenary.nvim", branch = "master"}},
+    --     build = "make tiktoken",
+    --     opts = {
+    --         -- See Configuration section for options
+    --     }
+    -- }
 })

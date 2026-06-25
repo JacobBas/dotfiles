@@ -4,7 +4,6 @@ local act = wezterm.action
 
 -- Assuming these are the base colors from the original scheme
 local acme_colors = {
-
     bg = '#ffffd7', -- Slightly darker yellow background
     fg = '#000000', -- Black text
     fg_blue = '#0b67b3', -- Blue-black text

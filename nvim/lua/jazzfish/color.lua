@@ -1,5 +1,6 @@
 local vim = vim
 local cmd = vim.cmd -- to exectue vim commands
+local lualine = require("jazzfish.lualine")
 
 local refreshing = false
 
@@ -38,6 +39,8 @@ local function set_github_border_highlights()
 end
 
 function ColorMyPencils()
+    local lualine_theme = 'auto'
+
     if (vim.g.colorscheme == "noirbuddy") then
         require('noirbuddy').setup {
             -- preset = "slate", --
@@ -85,8 +88,8 @@ function ColorMyPencils()
 
     elseif (vim.g.colorscheme == "rose-pine") then
         require('rose-pine').setup({
-            --- @usage 'auto'|'main'|'moon'|'dawn'
-            variant = 'auto',
+            --- @usage 'main'|'moon'|'dawn'
+            variant = 'dawn',
             --- @usage 'main'|'moon'|'dawn'
             dark_variant = 'moon',
             bold_vert_split = false,
@@ -126,9 +129,6 @@ function ColorMyPencils()
         })
         -- setup must be called before loading
         cmd.colorscheme "rose-pine"
-
-        -- set colorscheme after options
-        vim.cmd('colorscheme rose-pine')
 
     elseif (vim.g.colorscheme == "catppuccin") then
         require("catppuccin").setup({
@@ -205,15 +205,13 @@ function ColorMyPencils()
             -- ["transparent_background"] = 1, -- Use 1 for editor, 2 for editor & UI
             -- ["dim_inactive_windows"] = 1, -- Dims background of inactive windows
             -- ["disable_italic_comment"] = 1, -- Use 1 to disable italic comments
-            ["ui_contrast"] = "high", -- Options: "low", "high"
+            ["ui_contrast"] = "high" -- Options: "low", "high"
         }
         for key, value in pairs(options) do
             vim.g["gruvbox_material_" .. key] = value
         end
         vim.cmd.colorscheme "gruvbox-material"
-        --
-        -- ensure that lualine is also using this color theme
-        require('lualine').setup {options = {theme = "gruvbox-material"}}
+        lualine_theme = "gruvbox-material"
 
     elseif (vim.g.colorscheme == "nightfox") then
         -- Default options
@@ -275,9 +273,7 @@ function ColorMyPencils()
 
         -- Load the colorscheme
         require('nord').set()
-
-        -- making sure lualine is configured
-        require('lualine').setup {options = {theme = 'nord'}}
+        lualine_theme = 'nord'
 
         -- setting the split border color to be a nice white value so it's easier to see
         -- the separations
@@ -285,9 +281,7 @@ function ColorMyPencils()
 
     elseif (vim.g.colorscheme == "moonfly") then
         vim.cmd [[colorscheme moonfly]]
-
-        -- making sure lualine is configured
-        require('lualine').setup {options = {theme = 'moonfly'}}
+        lualine_theme = 'moonfly'
 
         -- moonfly configuration options
         vim.g.moonflyWinSeparator = 2
@@ -304,16 +298,10 @@ function ColorMyPencils()
         local github_theme = vim.o.background == "dark" and "github_dark_dimmed"
                                  or "github_light_colorblind"
         vim.cmd.colorscheme(github_theme)
-
-        -- making sure lualine is configured
-        require('lualine').setup {options = {theme = github_theme}}
-        set_github_border_highlights()
+        lualine_theme = github_theme
 
     elseif (vim.g.colorscheme == "moonbow") then
         require("moonbow")
-
-        -- making sure lualine is configured
-        require('lualine').setup {options = {theme = "moonbow"}}
 
     elseif (vim.g.colorscheme == "rasmus") then
         require("rasmus")
@@ -322,6 +310,7 @@ function ColorMyPencils()
     elseif (vim.g.colorscheme == "ayu-light") then
         require('ayu')
         vim.cmd [[colorscheme ayu-mirage]]
+        lualine_theme = 'ayu_light'
 
     elseif (vim.g.colorscheme == "cyberdream") then
         require("cyberdream").setup({
@@ -384,12 +373,11 @@ function ColorMyPencils()
             }
         }
         require('onedark').load()
-
-        -- making sure lualine is configured
-        require('lualine').setup {options = {theme = "onedark"}}
+        lualine_theme = "onedark"
 
     elseif (vim.g.colorscheme == "acme") then
         require("jazzfish.acme-color-scheme").setup {}
+        return
 
     elseif (vim.g.colorscheme == "everforest") then
         -- configuration options for this specific theme
@@ -407,10 +395,17 @@ function ColorMyPencils()
 
         -- setting the color theme
         vim.cmd.colorscheme "everforest"
+        lualine_theme = "everforest"
 
-        -- ensure that lualine is also using this color theme
-        require('lualine').setup {options = {theme = "everforest"}}
+    elseif (vim.g.colorscheme == "koda") then
+        -- configuration options for this specific theme
+        -- setting the color theme
+        vim.cmd.colorscheme "koda"
+        vim.api.nvim_set_hl(0, 'CursorColumn', {bg = "#272727"})
     end
+
+    lualine.setup(lualine_theme)
+    if vim.g.colorscheme == "github" then set_github_border_highlights() end
 end
 
 function RefreshColors()
@@ -422,11 +417,5 @@ function RefreshColors()
 
     if not ok then error(err) end
 end
-
-vim.api.nvim_create_autocmd("OptionSet", {
-    group = vim.api.nvim_create_augroup("JazzfishColors", {clear = true}),
-    pattern = "background",
-    callback = function() vim.schedule(RefreshColors) end
-})
 
 RefreshColors()

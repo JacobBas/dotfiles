@@ -1,5 +1,6 @@
-require("jazzfish.lazy")
 require("jazzfish.editor-opts")
+require("jazzfish.lazy")
 require("jazzfish.color")
 require("jazzfish.remap")
 require("jazzfish.snippets").setup()
+require("jazzfish.filetype-maps")
