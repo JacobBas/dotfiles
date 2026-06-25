@@ -84,8 +84,8 @@ end
 
 -- This table will hold the configuration.
 local config = {
-    -- color_scheme = 'Gruvbox dark, soft (base16)',
-    color_scheme = 'Everforest Dark Hard (Gogh)',
+    color_scheme = 'Gruvbox dark, soft (base16)',
+    -- color_scheme = 'Everforest Dark Hard (Gogh)',
     -- color_scheme = 'nordfox',
     -- color_scheme = 'Kanagawa (Gogh)',
     -- color_scheme = 'rose-pine-moon',

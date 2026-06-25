@@ -3,7 +3,7 @@
 # =============================================================================
 # DOTFILES SETUP SCRIPT
 # =============================================================================
-# This script sets up symbolic links for Neovim and WezTerm configurations
+# This script sets up symbolic links for Neovim, WezTerm, and Ghostty configurations
 # on Unix systems (macOS and Linux)
 
 set -e  # Exit on any error
@@ -43,9 +43,9 @@ create_backup() {
         print_warning "Existing configuration found at $config_path"
         print_status "Creating backup at $backup_path"
         mv "$config_path" "$backup_path"
-        return 0
     fi
-    return 1
+
+    return 0
 }
 
 # Function to create symbolic link
@@ -60,8 +60,22 @@ create_symlink() {
         mkdir -p "$target_dir"
     fi
     
-    # Create backup if target exists
-    create_backup "$target"
+    # Leave already-correct links alone so this script is safe to rerun.
+    if [[ -L "$target" ]]; then
+        local current_target
+        current_target="$(readlink "$target")"
+
+        if [[ "$current_target" == "$source" ]]; then
+            print_success "Already linked '$target' to '$source'"
+            return 0
+        fi
+
+        print_warning "Existing symlink found at $target -> $current_target"
+        rm "$target"
+    else
+        # Create backup if target exists
+        create_backup "$target"
+    fi
     
     # Create symbolic link
     print_status "Creating symbolic link: $source -> $target"
@@ -123,6 +137,75 @@ setup_wezterm() {
     fi
 }
 
+# Function to setup Ghostty configuration
+setup_ghostty() {
+    print_status "Setting up Ghostty configuration..."
+
+    local ghostty_source="$PWD/ghostty"
+    local ghostty_target="$HOME/.config/ghostty"
+
+    if [[ ! -d "$ghostty_source" ]]; then
+        print_warning "Ghostty configuration directory not found: $ghostty_source"
+        print_status "Skipping Ghostty setup..."
+        return 0
+    fi
+
+    create_symlink "$ghostty_source" "$ghostty_target"
+
+    if ! command -v ghostty &> /dev/null; then
+        print_warning "Ghostty is not installed. You can install it from:"
+        echo "  https://ghostty.org/download"
+    else
+        print_success "Ghostty configuration setup complete"
+    fi
+}
+
+# Function to setup optional XDG configuration directories
+setup_optional_config() {
+    local name="$1"
+    local source="$PWD/$name"
+    local target="$HOME/.config/$name"
+
+    print_status "Setting up $name configuration..."
+
+    if [[ ! -d "$source" ]]; then
+        print_status "$name configuration directory not found; skipping..."
+        return 0
+    fi
+
+    create_symlink "$source" "$target"
+}
+
+setup_kitty() {
+    setup_optional_config "kitty"
+}
+
+setup_helix() {
+    setup_optional_config "helix"
+}
+
+verify_symlink() {
+    local name="$1"
+    local source="$2"
+    local target="$3"
+
+    if [[ ! -L "$target" ]]; then
+        print_error "$name configuration not properly linked"
+        return 1
+    fi
+
+    local current_target
+    current_target="$(readlink "$target")"
+
+    if [[ "$current_target" != "$source" ]]; then
+        print_error "$name configuration points to '$current_target', expected '$source'"
+        return 1
+    fi
+
+    print_success "$name configuration linked"
+    return 0
+}
+
 # Function to verify installations
 verify_setup() {
     print_status "Verifying setup..."
@@ -130,40 +213,35 @@ verify_setup() {
     local errors=0
     
     # Check Neovim config
-    if [[ -L "$HOME/.config/nvim" ]]; then
-        print_success "Neovim configuration linked"
-    else
-        print_error "Neovim configuration not properly linked"
-        ((errors++))
+    if ! verify_symlink "Neovim" "$PWD/nvim" "$HOME/.config/nvim"; then
+        errors=$((errors + 1))
     fi
     
     # Check WezTerm config (if exists)
     if [[ -d "$PWD/wezterm" ]]; then
-        if [[ -L "$HOME/.config/wezterm" ]]; then
-            print_success "WezTerm configuration linked"
-        else
-            print_error "WezTerm configuration not properly linked"
-            ((errors++))
+        if ! verify_symlink "WezTerm" "$PWD/wezterm" "$HOME/.config/wezterm"; then
+            errors=$((errors + 1))
+        fi
+    fi
+
+    # Check Ghostty config (if exists)
+    if [[ -d "$PWD/ghostty" ]]; then
+        if ! verify_symlink "Ghostty" "$PWD/ghostty" "$HOME/.config/ghostty"; then
+            errors=$((errors + 1))
         fi
     fi
     
     # Check Kitty config (if exists)
     if [[ -d "$PWD/kitty" ]]; then
-        if [[ -L "$HOME/.config/kitty" ]]; then
-            print_success "Kitty configuration linked"
-        else
-            print_error "Kitty configuration not properly linked"
-            ((errors++))
+        if ! verify_symlink "Kitty" "$PWD/kitty" "$HOME/.config/kitty"; then
+            errors=$((errors + 1))
         fi
     fi
     
     # Check Helix config (if exists)
     if [[ -d "$PWD/helix" ]]; then
-        if [[ -L "$HOME/.config/helix" ]]; then
-            print_success "Helix configuration linked"
-        else
-            print_error "Helix configuration not properly linked"
-            ((errors++))
+        if ! verify_symlink "Helix" "$PWD/helix" "$HOME/.config/helix"; then
+            errors=$((errors + 1))
         fi
     fi
     
@@ -191,12 +269,10 @@ main() {
     # Setup configurations
     setup_neovim
     setup_wezterm
+    setup_ghostty
     setup_kitty
     setup_helix
-    
-    # Install Neovim plugins
-    install_neovim_plugins
-    
+
     # Verify setup
     verify_setup
     

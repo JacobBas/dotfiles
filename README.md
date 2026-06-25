@@ -1,6 +1,6 @@
 # Personal Dotfiles
 
-A comprehensive collection of development environment configurations featuring Neovim, Kitty terminal, and various development tools.
+A comprehensive collection of development environment configurations featuring Neovim, Ghostty, WezTerm, and various development tools.
 
 ## 🚀 Quick Start
 
@@ -13,10 +13,8 @@ Before running the setup, install these essential programs:
 - **Linux**: Follow [Neovim installation guide](https://github.com/neovim/neovim/wiki/Installing-Neovim)
 - **Windows**: Download from [Neovim releases](https://github.com/neovim/neovim/releases)
 
-#### **Kitty Terminal** (Required)
-- **macOS**: `curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin`
-- **Linux**: `curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin`
-- **Windows**: Download from [Kitty releases](https://github.com/kovidgoyal/kitty/releases)
+#### **Ghostty Terminal** (Recommended)
+- **macOS**: Download from [Ghostty](https://ghostty.org/download)
 
 #### **Node Version Manager** (Recommended)
 - **NVM**: `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash`
@@ -32,7 +30,7 @@ Before running the setup, install these essential programs:
 
 2. **Run the setup script**:
    ```bash
-   source init_config.sh
+   bash init_config.sh
    ```
 
 3. **Restart your terminal** and enjoy your new development environment!
@@ -51,9 +49,9 @@ dotfiles/
 │   │   ├── color.lua       # Colorscheme
 │   │   └── snippets/       # Custom snippets
 │   └── README.md           # Neovim documentation
-├── kitty/                   # Kitty terminal config
-│   └── kitty.conf          # Terminal configuration
-├── helix/                   # Helix editor config
+├── ghostty/                 # Ghostty terminal config
+│   ├── config              # Terminal configuration
+│   └── themes/             # Custom Ghostty themes
 ├── wezterm/                 # WezTerm config (alternative)
 ├── init_config.sh           # Setup script
 ├── init_config.ps1          # Windows setup script
@@ -84,13 +82,13 @@ A modern, feature-rich Neovim setup with:
 - Performance optimizations
 - Debugging tools
 
-### **Kitty Terminal**
-A fast, feature-rich terminal emulator with:
+### **Ghostty Terminal**
+A fast, native terminal emulator with:
 
 - **Performance**: GPU-accelerated rendering
 - **Customization**: Extensive configuration options
 - **Sessions**: Built-in session management
-- **Themes**: Multiple color schemes
+- **Themes**: Gruvbox Material light and dark color schemes
 - **Shortcuts**: Custom keybindings for productivity
 
 ### **Development Tools**
@@ -132,12 +130,12 @@ The leader is set to `<Space>` and provides access to most functionality.
 - `<leader>yl` - Copy selected line range
 - `<leader>ye` - Copy error context
 
-### **Kitty Terminal**
+### **Ghostty Terminal**
 - `Ctrl+Shift+T` - New tab
-- `Ctrl+Shift+W` - Close tab
-- `Ctrl+Shift+[` - Previous tab
-- `Ctrl+Shift+]` - Next tab
-- `Ctrl+Shift+Enter` - New window
+- `Super+Shift+Left` - Previous tab
+- `Super+Shift+Right` - Next tab
+- `Ctrl+Shift+V` - New vertical split
+- `Ctrl+Shift+H` - New horizontal split
 
 ## 🎨 Appearance
 
@@ -147,16 +145,15 @@ The leader is set to `<Space>` and provides access to most functionality.
 - **Status Line**: Lualine with git integration
 - **Highlights**: Custom syntax highlighting and diagnostics
 
-### **Kitty**
-- **Theme**: Custom color scheme optimized for development
+### **Ghostty**
+- **Theme**: Follows the macOS light/dark appearance using custom Gruvbox Material themes
 - **Font**: Monospace with ligatures support
-- **Transparency**: Subtle background transparency
 - **Icons**: Nerd Fonts for file type icons
 
 ## 🚀 Getting Started
 
 ### **First Launch**
-1. Open Kitty terminal
+1. Open Ghostty terminal
 2. Type `nvim` to start Neovim
 3. Wait for Lazy.nvim to install plugins (first time only)
 4. Enjoy your new development environment!
@@ -179,10 +176,10 @@ The leader is set to `<Space>` and provides access to most functionality.
 - `:h lazy.nvim` - Plugin manager docs
 - `:h telescope` - Fuzzy finder docs
 
-### **Kitty**
-- `kitty +kitten themes` - Browse themes
-- `kitty +kitten hints` - Show keyboard shortcuts
-- [Kitty Documentation](https://sw.kovidgoyal.net/kitty/)
+### **Ghostty**
+- `ghostty +show-config` - Show active configuration
+- `ghostty +show-config --default --docs` - Show all available options
+- [Ghostty Documentation](https://ghostty.org/docs)
 
 ### **Development**
 - [Neovim Lua Guide](https://github.com/nanotee/nvim-lua-guide)
@@ -214,8 +211,8 @@ vim.keymap.set('n', '<leader>key', function()
 end, { desc = 'Description' })
 ```
 
-### **Kitty Configuration**
-Edit `kitty/kitty.conf` for terminal customization.
+### **Ghostty Configuration**
+Edit `ghostty/config` for terminal customization. The setup script links this directory to `~/.config/ghostty`, so custom themes in `ghostty/themes/` stay in this repo.
 
 ## 🐛 Troubleshooting
 
@@ -227,7 +224,7 @@ Edit `kitty/kitty.conf` for terminal customization.
 3. **Keybindings not working**: Check `:map` for conflicts
 4. **Performance issues**: Check `:checkhealth`
 
-#### **Kitty**
+#### **Ghostty**
 1. **Font not loading**: Install Nerd Fonts
 2. **Colors not working**: Check theme configuration
 3. **Shortcuts not working**: Verify keybindings in config
@@ -236,7 +233,7 @@ Edit `kitty/kitty.conf` for terminal customization.
 - Use `:checkhealth` in Neovim for system health
 - Check `:LspInfo` for language server status
 - Use debugging snippets (`debug`, `debugvar`, etc.)
-- Check Kitty logs: `kitty --debug-keyboard`
+- Check Ghostty's active config: `ghostty +show-config`
 
 ## 📈 Performance
 
@@ -248,7 +245,7 @@ Edit `kitty/kitty.conf` for terminal customization.
 
 ### **System Requirements**
 - **Neovim**: 0.8+ required
-- **Kitty**: Modern terminal with GPU support
+- **Ghostty**: Modern terminal with GPU support
 - **Memory**: 2GB+ recommended for development
 - **Storage**: 1GB+ for plugins and tools
 
@@ -270,7 +267,7 @@ This configuration is open source and available under the MIT License.
 
 - **Neovim Team** - For the amazing editor
 - **Lazy.nvim** - For the fast plugin manager
-- **Kitty Team** - For the fast terminal
+- **Ghostty Team** - For the fast terminal
 - **Plugin Authors** - For the excellent ecosystem
 
 ---
