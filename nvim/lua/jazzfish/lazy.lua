@@ -139,40 +139,27 @@ require("lazy").setup({
     ---------------------------------------------------------------------------------------- 
     {'nvim-telescope/telescope.nvim', dependencies = {'nvim-lua/plenary.nvim'}}, --
     {'nvim-telescope/telescope-fzy-native.nvim'}, --
-    {
-        "dmtrKovalenko/fff.nvim",
-        build = "cargo build --release",
-        -- or if you are using nixos
-        -- build = "nix run .#release",
-        opts = {
-            -- pass here all the options
-        },
-        keys = {
-            {
-                "ff", -- try it if you didn't it is a banger keybinding for a picker
-                function()
-                    require("fff").find_files() -- or find_in_git_root() if you only want git files
-                end,
-                desc = "Open file picker"
-            }
-        }
-    }, --
     ---------------------------------------------------------------------------------------- 
     ---- TREE-SITTER -----------------------------------------------------------------------
     ---------------------------------------------------------------------------------------- 
     {
         'nvim-treesitter/nvim-treesitter',
-        dependencies = {
-            'nvim-treesitter/nvim-treesitter-context' -- 
-        },
         config = function()
             require('nvim-treesitter.configs').setup {
                 ensure_installed = {
                     "go", "javascript", "lua", "python", "rust", "vim"
                 },
+                -- Neovim 0.12 ships stable Markdown parsers and starts them
+                -- from its built-in markdown ftplugin. Do not let
+                -- nvim-treesitter's experimental Markdown parsers shadow them.
+                ignore_install = {"markdown", "markdown_inline"},
                 highlight = {
                     enable = true,
                     disable = function(lang, buf)
+                        if lang == "markdown" or lang == "markdown_inline" then
+                            return true
+                        end
+
                         local max_filesize = 100 * 1024 -- 100 KB
                         local ok, stats =
                             pcall(vim.loop.fs_stat,
