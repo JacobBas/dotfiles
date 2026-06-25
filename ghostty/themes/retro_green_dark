@@ -1,0 +1,25 @@
+# Retro Green Dark palette.
+
+palette = 0=#6d8240
+palette = 1=#5e231d
+palette = 2=#223712
+palette = 3=#533d16
+palette = 4=#173f3b
+palette = 5=#3e2846
+palette = 6=#164739
+palette = 7=#071005
+palette = 8=#516429
+palette = 9=#7a3026
+palette = 10=#314d1d
+palette = 11=#6a4b19
+palette = 12=#215650
+palette = 13=#563660
+palette = 14=#23664e
+palette = 15=#eff2d6
+
+background = #6d8240
+foreground = #071005
+cursor-color = #071005
+cursor-text = #6d8240
+selection-background = #87965d
+selection-foreground = #071005

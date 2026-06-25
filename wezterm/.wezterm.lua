@@ -2,80 +2,148 @@
 local wezterm = require 'wezterm'
 local act = wezterm.action
 
--- Assuming these are the base colors from the original scheme
-local acme_colors = {
+local retro_green = {
+    bg = '#6d8240',
+    bg_alt = '#61743a',
+    fg = '#071005',
+    fg_bright = '#eff2d6',
+    fg_dim = '#516429',
+    green = '#223712',
+    green_bright = '#314d1d',
+    amber = '#533d16',
+    amber_bright = '#6a4b19',
+    red = '#5e231d',
+    red_bright = '#7a3026',
+    blue = '#173f3b',
+    blue_bright = '#215650',
+    purple = '#3e2846',
+    purple_bright = '#563660',
+    cyan = '#164739',
+    cyan_bright = '#23664e',
+    selection = '#87965d'
+}
 
-    bg = '#ffffd7', -- Slightly darker yellow background
-    fg = '#000000', -- Black text
-    fg_blue = '#0b67b3', -- Blue-black text
-    fg_green = '#478c04', -- Green text 
-    fg_red = '#8c1f04', -- Red text
-    comment = '#999999', -- Grey for comments
-    selection = '#eeee9e', -- Darker yellow for selection
-    subtle = '#eaffff', -- Very light blue for subtle highlights
-    statusline = '#eaffff', -- Light blue for status line
-    statusline_inactive = '#c4f2f2', -- Light blue for status line
-    error = '#ff0000', -- Red for errors
-    warning = '#888822' -- Dark yellow for warnings
+local get_retro_green_colors = function()
+    return {
+        foreground = retro_green.fg,
+        background = retro_green.bg,
+        cursor_bg = retro_green.fg,
+        cursor_fg = retro_green.bg,
+        cursor_border = retro_green.fg,
+        selection_fg = retro_green.fg,
+        selection_bg = retro_green.selection,
+        scrollbar_thumb = retro_green.fg_dim,
+        split = retro_green.bg_alt,
+        ansi = {
+            retro_green.bg,
+            retro_green.red,
+            retro_green.green,
+            retro_green.amber,
+            retro_green.blue,
+            retro_green.purple,
+            retro_green.cyan,
+            retro_green.fg
+        },
+        brights = {
+            retro_green.fg_dim,
+            retro_green.red_bright,
+            retro_green.green_bright,
+            retro_green.amber_bright,
+            retro_green.blue_bright,
+            retro_green.purple_bright,
+            retro_green.cyan_bright,
+            retro_green.fg_bright
+        },
+        tab_bar = {
+            background = retro_green.bg_alt,
+            active_tab = {bg_color = retro_green.bg, fg_color = retro_green.fg},
+            inactive_tab = {
+                bg_color = retro_green.bg_alt,
+                fg_color = retro_green.fg_dim
+            },
+            inactive_tab_hover = {
+                bg_color = retro_green.selection,
+                fg_color = retro_green.fg
+            },
+            new_tab = {bg_color = retro_green.bg_alt, fg_color = retro_green.green},
+            new_tab_hover = {
+                bg_color = retro_green.selection,
+                fg_color = retro_green.green_bright,
+                italic = true
+            }
+        }
+    }
+end
+
+local acme_colors = {
+    bg = '#ffffd7',
+    bg_alt = '#eaffff',
+    bg_dim = '#eeee9e',
+    fg = '#111111',
+    fg_soft = '#3f3f36',
+    comment = '#6f705f',
+    selection = '#eeee9e',
+    red = '#8c1f04',
+    red_bright = '#b83b1d',
+    green = '#356f0d',
+    green_bright = '#478c04',
+    amber = '#7a6200',
+    amber_bright = '#9a7b00',
+    blue = '#0b67b3',
+    blue_bright = '#1b7fcf',
+    accent = '#0b67b3',
+    purple = '#7b3f8c',
+    purple_bright = '#9857a8',
+    cyan = '#26777a',
+    cyan_bright = '#2f9296'
 }
 
 local get_acme_colors = function()
     return {
-        -- The default text color
         foreground = acme_colors.fg,
-        -- The default background color
         background = acme_colors.bg,
-
-        -- Overrides the cell background color when the current cell is occupied by the
-        -- cursor and the cursor style is set to Block
         cursor_bg = acme_colors.fg,
-        -- Overrides the text color when the current cell is occupied by the cursor
         cursor_fg = acme_colors.bg,
-        -- Specifies the border color of the cursor when the cursor style is set to Block,
-        -- or the color of the vertical or horizontal bar when the cursor style is set to
-        -- Bar or Underline.
         cursor_border = acme_colors.fg,
-
-        -- the foreground color of selected text
         selection_fg = acme_colors.fg,
-        -- the background color of selected text
         selection_bg = acme_colors.selection,
-
-        -- The color of the scrollbar "thumb"; the portion that represents the current viewport
         scrollbar_thumb = acme_colors.comment,
-
-        -- The color of the split lines between panes
-        split = acme_colors.fg,
-
+        split = acme_colors.comment,
         ansi = {
-            acme_colors.bg, acme_colors.fg_red, acme_colors.fg_green,
-            acme_colors.warning, acme_colors.statusline, acme_colors.fg_blue, -- magenta
-            acme_colors.fg,
+            acme_colors.bg,
+            acme_colors.red,
+            acme_colors.green,
+            acme_colors.amber,
+            acme_colors.blue,
+            acme_colors.purple,
+            acme_colors.cyan,
             acme_colors.fg
         },
         brights = {
-            acme_colors.comment, acme_colors.fg_blue, acme_colors.fg_green,
-            acme_colors.warning, acme_colors.fg_blue, acme_colors.fg_red, -- magenta
-            acme_colors.fg,
-            acme_colors.fg
+            acme_colors.comment,
+            acme_colors.red_bright,
+            acme_colors.green_bright,
+            acme_colors.amber_bright,
+            acme_colors.blue_bright,
+            acme_colors.purple_bright,
+            acme_colors.cyan_bright,
+            '#ffffff'
         },
-
-        -- Tab bar colors
         tab_bar = {
-            background = acme_colors.statusline,
-            active_tab = {bg_color = acme_colors.bg, fg_color = acme_colors.fg},
+            background = acme_colors.bg_alt,
+            active_tab = {bg_color = acme_colors.accent, fg_color = acme_colors.bg},
             inactive_tab = {
-                bg_color = acme_colors.statusline,
+                bg_color = acme_colors.bg_alt,
                 fg_color = acme_colors.comment
             },
             inactive_tab_hover = {
-                bg_color = acme_colors.subtle,
+                bg_color = acme_colors.selection,
                 fg_color = acme_colors.fg
             },
-            new_tab = {bg_color = acme_colors.bg, fg_color = acme_colors.fg},
+            new_tab = {bg_color = acme_colors.bg_alt, fg_color = acme_colors.accent},
             new_tab_hover = {
-                bg_color = acme_colors.subtle,
-                fg_color = acme_colors.fg,
+                bg_color = acme_colors.selection,
+                fg_color = acme_colors.blue_bright,
                 italic = true
             }
         }
@@ -84,13 +152,15 @@ end
 
 -- This table will hold the configuration.
 local config = {
-    color_scheme = 'Gruvbox dark, soft (base16)',
+    colors = get_acme_colors(),
+    color_scheme = nil,
+    -- colors = get_retro_green_colors(),
+    -- color_scheme = 'Gruvbox dark, soft (base16)',
     -- color_scheme = 'Everforest Dark Hard (Gogh)',
     -- color_scheme = 'nordfox',
     -- color_scheme = 'Kanagawa (Gogh)',
     -- color_scheme = 'rose-pine-moon',
     -- color_scheme = 'rose-pine-dawn',
-    -- colors = get_acme_colors(),
     -- wezterm ls-fonts --list-system
     -- font=wezterm.font "Miracode",
     -- font=wezterm.font "DejaVu Sans Mono for Powerline",

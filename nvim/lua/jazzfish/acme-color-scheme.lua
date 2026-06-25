@@ -1,210 +1,223 @@
 local vim = vim
 
--- colors/acme.lua
 local M = {}
 
--- Define both light and dark color palettes
 M.colors = {
-    light = {
-        bg = '#ffffd7', -- Slightly darker yellow background
-        fg = '#000000', -- Black text
-        fg_blue = '#0b67b3', -- Blue-black text
-        fg_green = '#478c04', -- Green text 
-        fg_red = '#8c1f04', -- Red text
-        comment = '#999999', -- Grey for comments
-        selection = '#eeee9e', -- Darker yellow for selection
-        subtle = '#eaffff', -- Very light blue for subtle highlights
-        statusline = '#eaffff', -- Light blue for status line
-        statusline_inactive = '#c4f2f2', -- Light blue for status line
-        error = '#ff0000', -- Red for errors
-        warning = '#888822' -- Dark yellow for warnings
-    },
-    dark = {
-        bg = '#000028', -- Inverted from #ffffd7
-        fg = '#ffffff', -- Inverted from #000000
-        fg_blue = '#f4984c', -- Inverted from #0b67b3
-        fg_green = '#478c04', -- Green text 
-        fg_red = '#8c1f04', -- Red text
-        comment = '#666666', -- Inverted from #999999
-        selection = '#111161', -- Inverted from #eeee9e
-        subtle = '#150000', -- Inverted from #eaffff
-        statusline = '#150000', -- Inverted from #eaffff
-        statusline_inactive = '#3b0d0d', -- Inverted from #c4f2f2
-        error = '#ff0000', -- Red for errors
-        warning = '#888822' -- Dark yellow for warnings
-    }
+    bg = '#ffffd7',
+    bg_alt = '#eaffff',
+    bg_dim = '#eeee9e',
+    fg = '#111111',
+    fg_soft = '#3f3f36',
+    comment = '#6f705f',
+    selection = '#eeee9e',
+    red = '#8c1f04',
+    red_bright = '#b83b1d',
+    green = '#356f0d',
+    green_bright = '#478c04',
+    amber = '#7a6200',
+    amber_bright = '#9a7b00',
+    blue = '#0b67b3',
+    blue_bright = '#1b7fcf',
+    accent = '#0b67b3',
+    purple = '#7b3f8c',
+    purple_bright = '#9857a8',
+    cyan = '#26777a',
+    cyan_bright = '#2f9296'
 }
 
--- Function to get current color scheme
 function M.get_colors()
-    local background = vim.o.background or 'light'
-    return M.colors[background]
+    return M.colors
 end
 
--- Function to get highlight definitions with current colors
 function M.get_highlights()
-    local colors = M.get_colors()
+    local c = M.get_colors()
 
     return {
-        -- Editor UI
-        Normal = {fg = colors.fg, bg = colors.bg},
-        NonText = {fg = colors.comment},
-        Visual = {bg = colors.selection},
-        Search = {bg = colors.selection, bold = true},
-        IncSearch = {bg = colors.selection, bold = true},
-        StatusLine = {fg = colors.fg, bg = colors.statusline},
-        StatusLineNC = {fg = colors.comment, bg = colors.statusline},
-        SignColumn = {fg = colors.fg, bg = colors.bg},
-        VertSplit = {fg = colors.comment, bg = colors.bg},
-        LineNr = {fg = colors.comment, bg = colors.bg},
-        CursorLine = {bg = colors.subtle},
-        CursorLineNr = {fg = colors.fg, bold = true},
-        Folded = {fg = colors.comment, bg = colors.subtle},
-        FoldColumn = {fg = colors.comment, bg = colors.bg},
-        MatchParen = {bg = colors.selection, bold = true},
-        ColorColumn = {bg = colors.subtle},
-        Conceal = {fg = colors.comment},
-        Directory = {fg = colors.fg},
-        MoreMsg = {fg = colors.fg},
-        ModeMsg = {fg = colors.fg},
-        CursorColumn = {bg = colors.subtle},
-        TabLine = {fg = colors.comment, bg = colors.statusline},
-        TabLineSel = {fg = colors.fg, bg = colors.bg},
-        TabLineFill = {bg = colors.statusline},
+        Normal = {fg = c.fg, bg = c.bg},
+        NormalNC = {fg = c.fg_soft, bg = c.bg},
+        NormalFloat = {fg = c.fg, bg = c.bg_alt},
+        FloatBorder = {fg = c.comment, bg = c.bg_alt},
+        NonText = {fg = c.comment},
+        EndOfBuffer = {fg = c.bg},
+        Visual = {fg = c.fg, bg = c.selection},
+        Search = {fg = c.fg, bg = c.bg_dim, bold = true},
+        IncSearch = {fg = c.bg, bg = c.amber_bright, bold = true},
+        CurSearch = {fg = c.bg, bg = c.amber_bright, bold = true},
+        StatusLine = {fg = c.fg, bg = c.bg_alt},
+        StatusLineNC = {fg = c.comment, bg = c.bg_dim},
+        SignColumn = {fg = c.fg, bg = c.bg},
+        WinSeparator = {fg = c.comment, bg = c.bg},
+        VertSplit = {fg = c.comment, bg = c.bg},
+        LineNr = {fg = c.comment, bg = c.bg},
+        CursorLine = {bg = c.bg_alt},
+        CursorLineNr = {fg = c.accent, bg = c.bg_alt, bold = true},
+        CursorColumn = {bg = c.bg_alt},
+        ColorColumn = {bg = c.bg_alt},
+        Folded = {fg = c.comment, bg = c.bg_alt},
+        FoldColumn = {fg = c.comment, bg = c.bg},
+        MatchParen = {fg = c.fg, bg = c.selection, bold = true},
+        Conceal = {fg = c.comment},
+        Directory = {fg = c.accent, bold = true},
+        MoreMsg = {fg = c.green},
+        ModeMsg = {fg = c.accent},
+        Question = {fg = c.green},
+        Title = {fg = c.accent, bold = true},
+        TabLine = {fg = c.comment, bg = c.bg_alt},
+        TabLineSel = {fg = c.fg, bg = c.bg},
+        TabLineFill = {bg = c.bg_alt},
 
-        -- Syntax highlighting (minimal)
-        String = {fg = colors.fg_blue},
-        Number = {fg = colors.fg},
-        Float = {fg = colors.fg},
-        Boolean = {fg = colors.fg},
-        Character = {fg = colors.fg},
-        Constant = {fg = colors.fg, bold = true},
-        Identifier = {fg = colors.fg},
-        Variable = {fg = colors.fg},
-        Function = {fg = colors.fg},
-        Statement = {fg = colors.fg},
-        Operator = {fg = colors.fg, bold = true},
-        Keyword = {fg = colors.fg_green, underline = true, bold = true},
-        Type = {fg = colors.fg, bold = true},
-        Special = {fg = colors.fg},
-        PreProc = {fg = colors.fg_red, bold=true},
+        Pmenu = {fg = c.fg, bg = c.bg_alt},
+        PmenuSel = {fg = c.bg, bg = c.accent},
+        PmenuSbar = {bg = c.bg_alt},
+        PmenuThumb = {bg = c.comment},
+        WildMenu = {fg = c.bg, bg = c.accent},
 
-        -- Git highlights
-        DiffAdd = {bg = '#2a4d30'},
-        DiffChange = {bg = '#252525'},
-        DiffDelete = {bg = '#4d2a2a'},
-        DiffText = {bg = '#3a6640', bold = true},
+        Comment = {fg = c.comment, italic = true},
+        Constant = {fg = c.amber},
+        String = {fg = c.accent},
+        Character = {fg = c.accent},
+        Number = {fg = c.amber},
+        Boolean = {fg = c.amber_bright, bold = true},
+        Float = {fg = c.amber},
+        Identifier = {fg = c.fg},
+        Function = {fg = c.accent, bold = true},
+        Statement = {fg = c.green, bold = true},
+        Conditional = {fg = c.green, bold = true},
+        Repeat = {fg = c.green, bold = true},
+        Label = {fg = c.green},
+        Operator = {fg = c.fg},
+        Keyword = {fg = c.green, bold = true},
+        Exception = {fg = c.red, bold = true},
+        PreProc = {fg = c.red},
+        Include = {fg = c.red},
+        Define = {fg = c.red},
+        Macro = {fg = c.red},
+        Type = {fg = c.purple, bold = true},
+        StorageClass = {fg = c.purple},
+        Structure = {fg = c.purple},
+        Typedef = {fg = c.purple},
+        Special = {fg = c.cyan},
+        SpecialChar = {fg = c.cyan},
+        Tag = {fg = c.accent},
+        Delimiter = {fg = c.fg_soft},
+        SpecialComment = {fg = c.comment, italic = true},
+        Todo = {fg = c.bg, bg = c.amber_bright, bold = true},
 
-        -- Popup menu
-        Pmenu = {fg = colors.fg, bg = colors.subtle},
-        PmenuSel = {fg = colors.fg, bg = colors.selection},
-        PmenuSbar = {bg = colors.subtle},
-        PmenuThumb = {bg = colors.comment},
+        DiffAdd = {fg = c.green, bg = c.bg_alt},
+        DiffChange = {fg = c.amber, bg = c.bg_alt},
+        DiffDelete = {fg = c.red, bg = c.bg_alt},
+        DiffText = {fg = c.amber_bright, bg = c.selection, bold = true},
+        Added = {fg = c.green},
+        Changed = {fg = c.amber},
+        Removed = {fg = c.red},
 
-        -- Comments and todos
-        Comment = {fg = colors.comment, italic = true},
-        Todo = {fg = colors.comment, bold = true, italic = true},
+        DiagnosticError = {fg = c.red_bright},
+        DiagnosticWarn = {fg = c.amber_bright},
+        DiagnosticInfo = {fg = c.blue_bright},
+        DiagnosticHint = {fg = c.green_bright},
+        DiagnosticUnderlineError = {undercurl = true, sp = c.red_bright},
+        DiagnosticUnderlineWarn = {undercurl = true, sp = c.amber_bright},
+        DiagnosticUnderlineInfo = {undercurl = true, sp = c.blue_bright},
+        DiagnosticUnderlineHint = {undercurl = true, sp = c.green_bright},
 
-        -- Warnings and errors
-        WarningMsg = {fg = colors.warning, bold = true, italic = true},
-        ErrorMsg = {fg = colors.error, bold = true, italic = true},
+        GitSignsAdd = {fg = c.green},
+        GitSignsChange = {fg = c.amber},
+        GitSignsDelete = {fg = c.red},
 
-        -- Diagnostic messages
-        DiagnosticError = {fg = colors.error, bold = true, italic = true},
-        DiagnosticWarn = {fg = colors.warning, bold = true, italic = true},
-        DiagnosticInfo = {fg = colors.comment, italic = true},
-        DiagnosticHint = {fg = colors.comment, italic = true},
+        TelescopeNormal = {fg = c.fg, bg = c.bg},
+        TelescopeBorder = {fg = c.comment, bg = c.bg},
+        TelescopePromptNormal = {fg = c.fg, bg = c.bg_alt},
+        TelescopePromptBorder = {fg = c.comment, bg = c.bg_alt},
+        TelescopePromptTitle = {fg = c.bg, bg = c.accent},
+        TelescopePreviewTitle = {fg = c.bg, bg = c.green},
+        TelescopeResultsTitle = {fg = c.bg, bg = c.amber},
+        TelescopeSelection = {fg = c.fg, bg = c.selection},
+        TelescopeMatching = {fg = c.accent, bold = true},
 
-        -- Diagnostic underlines
-        DiagnosticUnderlineError = {
-            undercurl = true,
-            sp = colors.error,
-            bold = true,
-            italic = true
-        },
-        DiagnosticUnderlineWarn = {
-            undercurl = true,
-            sp = colors.warning,
-            bold = true,
-            italic = true
-        },
-        DiagnosticUnderlineInfo = {
-            undercurl = true,
-            sp = colors.comment,
-            italic = true
-        },
-        DiagnosticUnderlineHint = {
-            undercurl = true,
-            sp = colors.comment,
-            italic = true
-        }
+        ['@comment'] = {fg = c.comment, italic = true},
+        ['@string'] = {fg = c.accent},
+        ['@number'] = {fg = c.amber},
+        ['@boolean'] = {fg = c.amber_bright, bold = true},
+        ['@function'] = {fg = c.accent, bold = true},
+        ['@function.call'] = {fg = c.accent},
+        ['@method'] = {fg = c.accent},
+        ['@keyword'] = {fg = c.green, bold = true},
+        ['@keyword.function'] = {fg = c.green, bold = true},
+        ['@operator'] = {fg = c.fg},
+        ['@type'] = {fg = c.purple, bold = true},
+        ['@variable'] = {fg = c.fg},
+        ['@variable.builtin'] = {fg = c.red},
+        ['@property'] = {fg = c.cyan},
+        ['@field'] = {fg = c.cyan},
+        ['@constructor'] = {fg = c.purple},
+        ['@punctuation.delimiter'] = {fg = c.fg_soft},
+        ['@punctuation.bracket'] = {fg = c.fg_soft}
     }
 end
 
--- Setup function
+local function set_terminal_colors(c)
+    vim.g.terminal_color_0 = c.bg
+    vim.g.terminal_color_1 = c.red
+    vim.g.terminal_color_2 = c.green
+    vim.g.terminal_color_3 = c.amber
+    vim.g.terminal_color_4 = c.blue
+    vim.g.terminal_color_5 = c.purple
+    vim.g.terminal_color_6 = c.cyan
+    vim.g.terminal_color_7 = c.fg
+    vim.g.terminal_color_8 = c.comment
+    vim.g.terminal_color_9 = c.red_bright
+    vim.g.terminal_color_10 = c.green_bright
+    vim.g.terminal_color_11 = c.amber_bright
+    vim.g.terminal_color_12 = c.blue_bright
+    vim.g.terminal_color_13 = c.purple_bright
+    vim.g.terminal_color_14 = c.cyan_bright
+    vim.g.terminal_color_15 = c.fg
+end
+
 function M.setup(opts)
-    -- Override defaults with any user options
     if opts then
         M.colors = vim.tbl_deep_extend("force", M.colors, opts.colors or {})
     end
 
-    -- Reset all highlights
+    if vim.o.background ~= 'light' then vim.o.background = 'light' end
+
     vim.cmd('highlight clear')
     if vim.fn.exists('syntax_on') then vim.cmd('syntax reset') end
 
-    -- Set colorscheme name
     vim.g.colors_name = 'acme'
 
-    -- Get and set all highlights based on current background
     local highlights = M.get_highlights()
     for group, settings in pairs(highlights) do
         vim.api.nvim_set_hl(0, group, settings)
     end
 
-    -- Set up lualine with current colors
-    local colors = M.get_colors()
+    local c = M.get_colors()
+    set_terminal_colors(c)
+
+    local function active_lualine_section()
+        return {
+            a = {fg = c.bg, bg = c.accent, gui = 'bold'},
+            b = {fg = c.fg, bg = c.bg_alt},
+            c = {fg = c.fg_soft, bg = c.bg}
+        }
+    end
+
     require('lualine').setup {
         options = {
             theme = {
-                normal = {
-                    a = {fg = colors.fg, bg = colors.statusline},
-                    b = {fg = colors.fg, bg = colors.statusline},
-                    c = {fg = colors.fg, bg = colors.statusline}
-                },
-                insert = {
-                    a = {fg = colors.fg, bg = colors.statusline},
-                    b = {fg = colors.fg, bg = colors.statusline},
-                    c = {fg = colors.fg, bg = colors.statusline}
-                },
-                visual = {
-                    a = {fg = colors.fg, bg = colors.statusline},
-                    b = {fg = colors.fg, bg = colors.statusline},
-                    c = {fg = colors.fg, bg = colors.statusline}
-                },
-                replace = {
-                    a = {fg = colors.fg, bg = colors.statusline},
-                    b = {fg = colors.fg, bg = colors.statusline},
-                    c = {fg = colors.fg, bg = colors.statusline}
-                },
-                command = {
-                    a = {fg = colors.fg, bg = colors.statusline},
-                    b = {fg = colors.fg, bg = colors.statusline},
-                    c = {fg = colors.fg, bg = colors.statusline}
-                },
+                normal = active_lualine_section(),
+                insert = active_lualine_section(),
+                visual = active_lualine_section(),
+                replace = active_lualine_section(),
+                command = active_lualine_section(),
                 inactive = {
-                    a = {fg = colors.comment, bg = colors.statusline_inactive},
-                    b = {fg = colors.comment, bg = colors.statusline_inactive},
-                    c = {fg = colors.comment, bg = colors.statusline_inactive}
+                    a = {fg = c.comment, bg = c.bg_dim},
+                    b = {fg = c.comment, bg = c.bg_dim},
+                    c = {fg = c.comment, bg = c.bg}
                 }
             }
         }
     }
 end
-
--- Add autocmd to update colors when background changes
-vim.api.nvim_create_autocmd("OptionSet", {
-    pattern = "background",
-    callback = function() M.setup() end
-})
 
 return M

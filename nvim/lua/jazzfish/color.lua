@@ -344,6 +344,9 @@ function ColorMyPencils()
         -- making sure lualine is configured
         require('lualine').setup {options = {theme = "onedark"}}
 
+    elseif (vim.g.colorscheme == "retro-green") then
+        require("jazzfish.retro-green-color-scheme").setup {}
+
     elseif (vim.g.colorscheme == "acme") then
         require("jazzfish.acme-color-scheme").setup {}
 

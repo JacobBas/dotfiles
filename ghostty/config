@@ -1,7 +1,9 @@
 # Ghostty Configuration converted from WezTerm
 
-# Color scheme follows the macOS light/dark appearance.
-theme = light:gruvbox_material_light,dark:gruvbox_material_dark
+# ACME is intentionally a single light theme.
+theme = acme_light
+# Retro Green alternate:
+# theme = light:retro_green_light,dark:retro_green_dark
 
 # Font configuration
 font-family = "Monaspace Neon"

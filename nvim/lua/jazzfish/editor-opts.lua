@@ -29,16 +29,16 @@ opt.cmdheight = 0
 opt.mouse = ""
 
 -- -- setting the colortheme
-g.colorscheme = "gruvbox"
+g.colorscheme = "acme"
+-- g.colorscheme = "retro-green"
+-- g.colorscheme = "gruvbox"
 -- g.colorscheme = "everforest"
 -- g.colorscheme = "cyberdream"
 -- g.colorscheme = "ayu-light"
 -- g.colorscheme = "nightfox"
 -- g.colorscheme = "kanagawa"
 -- g.colorscheme = "rose-pine"
--- g.colorscheme = 'acme'
--- vim.o.background = 'light' -- 'light' or 'dark'
-require("jazzfish.system-appearance").setup()
+-- require("jazzfish.system-appearance").setup()
 
 opt.updatetime = 500
 opt.redrawtime = 1000  -- ms to wait for syntax highlighting

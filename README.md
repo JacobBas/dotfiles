@@ -88,7 +88,7 @@ A fast, native terminal emulator with:
 - **Performance**: GPU-accelerated rendering
 - **Customization**: Extensive configuration options
 - **Sessions**: Built-in session management
-- **Themes**: Gruvbox Material light and dark color schemes
+- **Themes**: Custom ACME light theme and Retro Green alternates
 - **Shortcuts**: Custom keybindings for productivity
 
 ### **Development Tools**
@@ -140,13 +140,13 @@ The leader is set to `<Space>` and provides access to most functionality.
 ## 🎨 Appearance
 
 ### **Neovim**
-- **Primary Colorscheme**: Gruvbox with custom modifications
-- **Alternative**: Custom ACME colorscheme
-- **Status Line**: Lualine with git integration
+- **Primary Colorscheme**: Custom ACME colorscheme with a simple pastel yellow workspace and blue accent
+- **Alternative**: Custom Retro Green with a lighter `#6d8240` green background
+- **Status Line**: Lualine with git integration and the ACME blue accent
 - **Highlights**: Custom syntax highlighting and diagnostics
 
 ### **Ghostty**
-- **Theme**: Follows the macOS light/dark appearance using custom Gruvbox Material themes
+- **Theme**: Uses the custom ACME light theme regardless of macOS appearance
 - **Font**: Monospace with ligatures support
 - **Icons**: Nerd Fonts for file type icons
 

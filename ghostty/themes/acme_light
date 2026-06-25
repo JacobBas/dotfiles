@@ -1,0 +1,25 @@
+# ACME Light palette.
+
+palette = 0=#ffffd7
+palette = 1=#8c1f04
+palette = 2=#356f0d
+palette = 3=#7a6200
+palette = 4=#0b67b3
+palette = 5=#7b3f8c
+palette = 6=#26777a
+palette = 7=#111111
+palette = 8=#6f705f
+palette = 9=#b83b1d
+palette = 10=#478c04
+palette = 11=#9a7b00
+palette = 12=#1b7fcf
+palette = 13=#9857a8
+palette = 14=#2f9296
+palette = 15=#ffffff
+
+background = #ffffd7
+foreground = #111111
+cursor-color = #111111
+cursor-text = #ffffd7
+selection-background = #eeee9e
+selection-foreground = #111111

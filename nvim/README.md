@@ -51,7 +51,7 @@ nvim/
 - **Linting** - Built-in diagnostics with LSP
 
 ### **Quality of Life**
-- **Status Line** - Lualine with git info and diagnostics
+- **Status Line** - Lualine with git info, diagnostics, and the ACME blue accent
 - **Commentary** - Easy commenting with `gc`
 - **Surround** - Surround text with brackets/quotes
 - **Undotree** - Visual undo history
@@ -108,8 +108,9 @@ The leader is set to `<Space>` and is used extensively throughout the configurat
 ## 🎨 Appearance
 
 ### **Colorscheme**
-- **Gruvbox** - Primary colorscheme with custom modifications
-- **Custom ACME** - Additional colorscheme for variety
+- **ACME** - Primary Plan 9-style light-only theme
+- **Retro Green** - Additional colorscheme with a lighter `#6d8240` green background
+- **Gruvbox** - Additional colorscheme option
 - **Lualine** - Status line with git integration
 - **Scrollbar** - Visual scrollbar with highlights
 - **Reticle** - Enhanced cursor line/column highlighting
